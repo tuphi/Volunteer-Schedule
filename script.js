@@ -1,12 +1,55 @@
-function onEdit(e) {
-  createEvents();
-  Logger.log("is editted");
+function triggerNewSheet() {
+  var id = "1Ff_oDkKvcajigONMEPpkonVVlhYVyUJJVOd-ZEEUMcw";  
+  createSpreadsheetEditTrigger(id);
+}
+
+
+/**
+ * Creates a trigger for when a spreadsheet opens.
+ */
+function createSpreadsheetEditTrigger(spreadsheetId) {
+  
+  /*
+  Opens the spreadsheet with the given ID.
+  A spreadsheet ID can be extracted from its URL.
+  For example, the spreadsheet ID in the URL https://docs.google.com/spreadsheets/d/abc1234567/edit#gid=0 is "abc1234567". 
+  */
+  
+     
+  var ss = SpreadsheetApp.getActive();
+  ScriptApp.newTrigger('createEvents')
+      .forSpreadsheet(ss)
+      .onEdit()
+      .create();
+  
+  ScriptApp.newTrigger('myFunction')
+  .forSpreadsheet(SpreadsheetApp.getActive())
+  .onEdit()
+  .create();
+}
+
+/**
+ * Deletes a trigger.
+ * @param {string} triggerId The Trigger ID.
+ */
+function deleteTrigger(triggerId) {
+  // Loop over all triggers.
+  var allTriggers = ScriptApp.getProjectTriggers();
+  for (var i = 0; i < allTriggers.length; i++) {
+    // If the current trigger is the correct one, delete it.
+    if (allTriggers[i].getUniqueId() === triggerId) {
+      ScriptApp.deleteTrigger(allTriggers[i]);
+      break;
+    }
+  }
 }
 
 function createEvents() {
 
   // Step 1:
-  var spreadsheet = SpreadsheetApp.getActiveSheet();
+//  var spreadsheet = SpreadsheetApp.getActiveSheet();
+  var sheetName = "Copy of [2020] [23-29/03]";
+  var spreadsheet = SpreadsheetApp.getSheetByName(sheetname);
   var calendarId = 'qvplpq5euuqfupgfj6aqd0nnuk@group.calendar.google.com';
   var eventCal = CalendarApp.getCalendarById(calendarId);
 
@@ -114,10 +157,4 @@ function createEvents() {
 
   }
 
-
-
-
 }
-
-
-function syncAll() {}

@@ -1,22 +1,26 @@
-function onEdit(e) {
-  createEvents();
-  Logger.log("is editted");
+var calendarId = 'paste_your_calendar_id_here';
+
+function syncAll() {
+  var recordingRange = "E10:Y18";
+  var volunteerRange = "B10:D18";
+  var shiftRange= "E8:Y9";
+  var eventIdRange = "AE10:AY18";
+  createEvents(recordingRange, volunteerRange, shiftRange, eventIdRange);
 }
 
-function createEvents() {
+function createEvents(recordingRange, volunteerRange, shiftRange, eventIdRange) {
 
   // Step 1:
   var spreadsheet = SpreadsheetApp.getActiveSheet();
-  var calendarId = 'qvplpq5euuqfupgfj6aqd0nnuk@group.calendar.google.com';
   var eventCal = CalendarApp.getCalendarById(calendarId);
 
   //Step 2: Collect data from Spread sheet
-  var recordings = spreadsheet.getRange("E10:Y18").getValues();
-  var volunteers = spreadsheet.getRange("B10:D12").getValues();
-  var shifts = spreadsheet.getRange("E8:Y9").getValues();
+  var recordings = spreadsheet.getRange(recordingRange).getValues();
+  var volunteers = spreadsheet.getRange(volunteerRange).getValues();
+  var shifts = spreadsheet.getRange(shiftRange).getValues();
 
-  var eventRange = spreadsheet.getRange("AE10:AY18");
-  var eventIds = spreadsheet.getRange("AE10:AY18").getValues();
+  var eventRange = spreadsheet.getRange(eventIdRange);
+  var eventIds = spreadsheet.getRange(eventIdRange).getValues();
 
 
   //Step 3: Detect whether or not there is an event at a specific time range
@@ -38,7 +42,7 @@ function createEvents() {
         var startTime = shifts[0][column];
         var endTime = shifts[1][column];
 
-        var eventTitle = "";
+        var eventTitle = "Open Road Recording: ";
 
         //Name
         var name;
@@ -107,12 +111,14 @@ function createEvents() {
           Logger.log('Remove an event');
 
         } catch(e) {
+          
           // Remove event id
           eventIds[row][column] = null;
           eventRange.setValues(eventIds);
 
-          Logger.log('Remove an event');
-        }
+          Logger.log('Remove an event');          
+          
+          }
 
       }
 
@@ -120,10 +126,5 @@ function createEvents() {
 
   }
 
-
-
-
 }
 
-
-function syncAll() {}

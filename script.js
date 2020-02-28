@@ -95,7 +95,7 @@ function createEvents() {
 
         var oldEvent = eventCal.getEventById(eventIds[row][column]);
 
-        if (oldEvent != null) {
+        try {
 
           //Remove event
           oldEvent.deleteEvent();
@@ -106,6 +106,12 @@ function createEvents() {
 
           Logger.log('Remove an event');
 
+        } catch(e) {
+          // Remove event id
+          eventIds[row][column] = null;
+          eventRange.setValues(eventIds);
+
+          Logger.log('Remove an event');
         }
 
       }
